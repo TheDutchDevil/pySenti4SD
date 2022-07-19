@@ -1,4 +1,16 @@
-# pySenti4SD
+# Dockerized pySenti4SD
+
+This repository encapsulates PySenti4SD as a docker image. The Dockerfile within 
+this repository can be used to build PySenti4SD as a docker image. Moreover, the 
+built image within this repository is also pushed to DockerHub as nathancassee/pysenti4sd. 
+
+To run it, simply use `docker run nathancassee/pysenti4sd`. You can use volumes to 
+get input and output files in the container. This image opens a bash shell in the 
+folder in which Senti4SD is installed. To use Senti4Sd please see the original 
+Senti4SD documentation below. 
+
+# Senti4SD
+
 Python implementation of Senti4SD. Senti4SD is an emotion polarity classifier specifically trained to support sentiment analysis in developers' communication channels. 
 Senti4SD is trained and evaluated on a gold standard of over 4K posts extracted from Stack Overflow. It is part of the Collab Emotion Mining Toolkit, ([EMTk](https://github.com/collab-uniba/EMTk)).
 
@@ -6,28 +18,6 @@ Senti4SD is trained and evaluated on a gold standard of over 4K posts extracted 
 Please, cite the following paper if you intend to use our tool for your own research:
 > Calefato, F., Lanubile, F., Maiorano, F., Novielli N. (2018) "Sentiment Polarity Detection for Software Development," _Empirical Software Engineering_, 23(3), pp:1352-1382, doi: https://doi.org/10.1007/s10664-017-9546-9. [(BibTeX)](https://scholar.googleusercontent.com/scholar.bib?q=info:2Vtb0Wmx7hEJ:scholar.google.com/&output=citation&scisig=AAGBfm0AAAAAW9gCvJzwrHV1MKhoxzqLaJZA8lPDFxgx&scisf=4&ct=citation&cd=-1&hl=en)
 
-## How do I get set up? ##
-
-### Installation ###
-
-**NOTE**: You will need to install [dvc](https://dvc.org) to check out this project. Once installed and initialized, simply the following:
-
-```bash
-git clone https://github.com/collab-uniba/pySenti4SD.git
-cd pySenti4SD
-dvc pull -r origin
-```
-
-### Requirements ###
-
-* dvc
-* java 8+
-* python 3.7+
-    * Libraries
-        * ```numpy, pandas, scipy, scikit-learn, joblib```
-        * Installation:  
-        ```pip install -r requirements.txt```
-    
 
 ## Usage ##
 In the following, we show first how to train a new model for polarity classification and, then, how to test the model on unseen data.  

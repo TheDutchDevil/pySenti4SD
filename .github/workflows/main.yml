@@ -39,5 +39,16 @@ jobs:
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/master' }}
 
+      - name: push README to Dockerhub
+        uses: christian-korneck/update-container-description-action@v1
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASS: ${{ secrets.DOCKER_TOKEN }}
+        with:
+          destination_container_repo: ${{ secrets.DOCKER_USERNAME }}/pysenti4sd
+          provider: dockerhub
+          short_description: 'Dockerized instance of pysenti4sd'
+          readme_file: 'README.md'
+          
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
