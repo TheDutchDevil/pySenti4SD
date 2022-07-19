@@ -11,6 +11,7 @@ apt-get install -y \
     python3-pip \
     python-is-python3 \
     build-essential \
-    python3.8-dev 
+    python3.8-dev \
+    dos2unix
 
 pip3 install -r requirements.txt
