@@ -6,7 +6,7 @@ COPY install-deps.sh install-deps.sh
 
 COPY requirements.txt requirements.txt
 
-RUN ./install-deps.sh
+RUN sudo ./install-deps.sh
 
 COPY . .
 
