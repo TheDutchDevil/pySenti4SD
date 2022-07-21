@@ -43,8 +43,8 @@ jobs:
           context: ./
           # Note: tags has to be all lower-case
           tags: ${{ steps.meta.outputs.tags }}
-          # build on feature branches, push only on main branch
-          push: ${{ github.ref == 'refs/heads/master' }}
+          # build on feature branches, push only on main branch or when a tag is pushed
+          push: ${{ github.ref == 'refs/heads/master' || startsWith('/refs/tags', github.ref) }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: push README to Dockerhub
