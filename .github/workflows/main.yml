@@ -45,6 +45,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           # build on feature branches, push only on main branch
           push: ${{ github.ref == 'refs/heads/master' }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: push README to Dockerhub
         uses: christian-korneck/update-container-description-action@v1
