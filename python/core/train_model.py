@@ -53,5 +53,6 @@ class Train():
 
         self.report = Report(y_test, y_pred)
         
-        save_model(f"{self.model_name}", model)
+        save_model(f"{self.model_name}", model, le)
+
         return y_pred

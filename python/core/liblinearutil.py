@@ -10,6 +10,8 @@ from liblinear_multicore.commonutil import *
 from liblinear_multicore.commonutil import __all__ as common_all
 from ctypes import c_double
 
+import pickle
+
 if sys.version_info[0] < 3:
 	range = xrange
 	from itertools import izip as zip
@@ -30,13 +32,17 @@ def load_model(model_file_name):
 	model = toPyModel(model)
 	return model
 
-def save_model(model_file_name, model):
+def save_model(model_file_name, model, le):
 	"""
 	save_model(model_file_name, model) -> None
 
 	Save a LIBLINEAR model to the file model_file_name.
 	"""
 	liblinear.save_model(model_file_name.encode(), model)
+
+	output = open(f"{model_file_name}_le", 'wb')
+	pickle.dump(le, output)
+	output.close()
 
 def train(arg1, arg2=None, arg3=None):
 	"""

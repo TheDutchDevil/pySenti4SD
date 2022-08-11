@@ -36,6 +36,8 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
 
     df = pd.read_csv(file_path)
 
+    df["text"] = df["text"].apply(lambda x: x.replace("\n", " "))
+
     train_X, test_X, train_y, test_y = train_test_split(df[['text', 'id']], df['label'].values, test_size=split, random_state=random_state)
 
     df_train = pd.DataFrame(train_X)
@@ -67,9 +69,11 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
 
     predictions = pd.read_csv(predictions_path)
 
+    df_test = pd.read_csv("test.csv")
+
     predictions["GroundTruth"] = df_test["polarity"]
     predictions["Text"] = df_test["text"]
-    predictions = predictions.rename(columns={'PREDICTED': 'Prediction'})
+    predictions = predictions.rename(columns={'PREDICTED': 'Prediction', "ID": "Id"})
     
     if predictions_path is not None:
         predictions.to_csv(predictions_path, index=False)

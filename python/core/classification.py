@@ -1,6 +1,7 @@
 import os
 import csv
 import glob
+import pickle
 from multiprocessing import Pool
 from collections import OrderedDict
 
@@ -57,8 +58,11 @@ class Classification():
         self.__create_classification_file(pred_file)
         chunk_size = int(chunk_size / jobs_number)
         stop = False
-        label_encoder = LabelEncoder()
-        label_encoder.fit(['positive', 'negative', 'neutral'])
+        
+        pkl_file = open(f"{self.model}_le", 'rb')
+        label_encoder = pickle.load(pkl_file) 
+        pkl_file.close()
+
         with open(csv_file, 'r+') as csv:
             next(csv)
             while not stop:
