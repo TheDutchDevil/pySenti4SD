@@ -9,6 +9,11 @@ get input and output files in the container. This image opens a bash shell in th
 folder in which Senti4SD is installed. To use Senti4Sd please see the original 
 Senti4SD documentation below. 
 
+To ease the usage of pysenti4sd we provide `utility.py`. This file can be 
+run using the following command:
+
+`python utility.py --train --model-name [name] --input [input-file] --output [output-file]`
+
 # Senti4SD
 
 Python implementation of Senti4SD. Senti4SD is an emotion polarity classifier specifically trained to support sentiment analysis in developers' communication channels. 
