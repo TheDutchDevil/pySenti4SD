@@ -43,6 +43,13 @@ def main():
                         help = 'model file name',
                         type = str,
                         default = 'Senti4SD')
+
+    parser.add_argument("-o",
+                        "--output",
+                        help = "path to output file",
+                        type = str,
+                        default = None)
+
     args = parser.parse_args()
 
     seed = np.random.seed(42)
@@ -109,9 +116,13 @@ def main():
 
     logging.info("Start training model")
     train = Train(jobs_number, best_solver_name, best_solver_value, best_c_value, model_path)
-    train.train_model(X_train, X_test, y_train, y_test)
+    y_pred = train.train_model(X_train, X_test, y_train, y_test)
     train.save_best_perfomance(dir_path)
     logging.info("End training model")
+
+
+
+
     
    
 if __name__ == '__main__':

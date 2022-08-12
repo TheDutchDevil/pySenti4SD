@@ -49,7 +49,7 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
     df_train.to_csv(f"train.csv", index=False)
     df_test.to_csv(f"test.csv", index=False)
 
-    command = f"bash train.sh -i train.csv -m model_{model_name}"
+    command = f"bash train.sh -i train.csv -i test.csv -m model_{model_name}"
 
     # Path to classification task folder
     print(f"Executing '{command}'")
