@@ -1,3 +1,11 @@
+FROM dvcorg/cml:latest
+
+WORKDIR /app
+
+COPY . .
+
+RUN dvc pull -r origin
+
 FROM ubuntu:20.04
 
 WORKDIR /app
@@ -8,9 +16,7 @@ COPY requirements.txt requirements.txt
 
 RUN chmod +x ./install-deps.sh && ./install-deps.sh
 
-COPY . .
-
-RUN dvc pull -r origin
+COPY --from=0 /app /app
 
 RUN dos2unix train.sh
 RUN dos2unix classification.sh

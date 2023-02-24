@@ -16,7 +16,7 @@ def get_models():
     '''
     pass
 
-def train_model(file_path, model_name, predictions_path = None, split = 0.3, random_state = None):
+def train_model(file_path, model_name, predictions_path = None, split = 0.3, random_state = None, text_column = "text", label_column = "label"):
     '''
     Take a file, converts it to the pysenti4sd format and 
     then calls the pysenti4sd shell to train the model.  
@@ -36,7 +36,8 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
 
     df = pd.read_csv(file_path)
 
-    df["text"] = df["text"].apply(lambda x: x.replace("\n", " "))
+    df["text"] = df[text_column].apply(lambda x: x.replace("\n", " "))
+    df["label"] = df[label_column]
 
     train_X, test_X, train_y, test_y = train_test_split(df[['text', 'id']], df['label'].values, test_size=split, random_state=random_state)
 
@@ -92,6 +93,12 @@ if __name__ == "__main__":
     parser.add_argument("--input", dest="input", help="", type=str)
 
     parser.add_argument("--output", dest="output", help="", type=str)
+
+    # The two columns can be used to deal with non-standard dataset files. 
+
+    parser.add_argument("--text-column", dest="text_column", help="", type=str, default="text")
+
+    parser.add_argument("--label-column", dest="label_column", help="", type=str, default="label")
 
     args = parser.parse_args()
 
