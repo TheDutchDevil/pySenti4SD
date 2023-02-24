@@ -36,6 +36,10 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
 
     df = pd.read_csv(file_path)
 
+    # If there is no column named id, we add one with row numbers
+    if "id" not in df.columns:
+        df["id"] = df.index
+
     df["text"] = df[text_column].apply(lambda x: x.replace("\n", " "))
     df["label"] = df[label_column]
 
@@ -103,7 +107,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.train:
-        train_model(args.input, args.model_name, predictions_path = args.output)
+        train_model(args.input, args.model_name, predictions_path = args.output, text_column=args.text_column, label_column=args.label_column)
 
 
 
