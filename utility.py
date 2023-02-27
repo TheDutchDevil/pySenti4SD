@@ -8,13 +8,27 @@ import os
 import sys
 import subprocess
 import argparse
+import shutil
 
 def get_models():
     '''
     Returns a list of all models that are currently present 
-    on the local filesystem
+    on the local filesystem. For this we list all the filenames 
+    in the models folder.
     '''
-    pass
+    
+    models = []
+
+    for file in os.listdir("/models"):
+        if file.endswith(".model"):
+            models.append(file.replace(".model", ""))
+    
+    print("Model available on the system:")
+
+    for model in models:
+        print(f"\t{model}")
+
+ 
 
 def train_model(file_path, model_name, predictions_path = None, split = 0.3, random_state = None, text_column = "text", label_column = "label"):
     '''
@@ -54,7 +68,7 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
     df_train.to_csv(f"train.csv", index=False)
     df_test.to_csv(f"test.csv", index=False)
 
-    command = f"bash train.sh -i train.csv -i test.csv -m model_{model_name}"
+    command = f"bash train.sh -i train.csv -i test.csv -m {model_name}"
 
     # Path to classification task folder
     print(f"Executing '{command}'")
@@ -63,8 +77,24 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
 
     run_result.check_returncode()
 
+    # Move the trained model to the models folder
+    shutil.move(os.path.join("/app", f"{model_name}.model"), os.path.join("/models", f"{model_name}.model"))
+    shutil.move(os.path.join("/app", f"{model_name}.model_le"), os.path.join("/models", f"{model_name}.model"))
+   
 
-    command = f"bash classification.sh -i test.csv -m model_{model_name}.model -o test_preds.csv"
+
+def predict(file, model_name = "Senti4SD", predictions_path = "out.csv", text_column = "text"):
+
+    df = pd.read_csv(file)
+
+    if "id" not in df.columns:
+        df["Id"] = df.index
+
+    df["Text"] = df[text_column].apply(lambda x: x.replace("\n", " "))
+
+    df.to_csv(f"to_run.csv", index=False)
+
+    command = f"bash classification.sh -i to_run.csv -m {model_name}.model -o test_preds.csv"
 
     run_result = subprocess.run(command, text=True, shell=True, stderr=sys.stdout, stdout=sys.stdout)
 
@@ -74,23 +104,23 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
 
     predictions = pd.read_csv(predictions_path)
 
-    df_test = pd.read_csv("test.csv")
+    df_test = pd.read_csv(file)
 
-    predictions["GroundTruth"] = df_test["polarity"]
-    predictions["Text"] = df_test["text"]
+    predictions["Text"] = df_test[text_column]
     predictions = predictions.rename(columns={'PREDICTED': 'Prediction', "ID": "Id"})
     
     if predictions_path is not None:
         predictions.to_csv(predictions_path, index=False)
         print(f"Wrote output file to {predictions_path}")
 
-    print(metrics.classification_report(predictions["GroundTruth"], predictions["Prediction"]))
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--train", dest="train", help="", action="store_true")
+
+    parser.add_argument("--list", dest="list", help="", action="store_true")
+
+    parser.add_argument("--predict", dest="predict", help="", action="store_true")
 
     parser.add_argument("--model-name", dest="model_name", help="", type=str)
 
@@ -106,8 +136,17 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    if sum([args.train, args.list, args.predict]) != 1:
+        raise ValueError("You must specify either --train, --list or --predict")
+
+    if args.list:
+        get_models()
+
     if args.train:
         train_model(args.input, args.model_name, predictions_path = args.output, text_column=args.text_column, label_column=args.label_column)
+
+    if args.predict:
+        predict(args.input, model_name = args.model_name, predictions_path = args.output, text_column=args.text_column)
 
 
 

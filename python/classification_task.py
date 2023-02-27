@@ -74,6 +74,8 @@ def main():
         logging.error(e)
         sys.exit(1)
 
+    print(f"Using model at f{args.model}")
+
     if not Path(args.model).exists():
         print("Model doesn't exist. Provide a correct path to the model, or train a new one using the train script.")
         sys.exit(1)

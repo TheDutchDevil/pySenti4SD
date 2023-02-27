@@ -18,6 +18,10 @@ RUN chmod +x ./install-deps.sh && ./install-deps.sh
 
 COPY --from=0 /app /app
 
+RUN mkdir /models/
+
+COPY Senti4SD.model /models/Senti4SD.model
+
 RUN dos2unix train.sh
 RUN dos2unix classification.sh
 

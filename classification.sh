@@ -1,13 +1,14 @@
 #!/bin/bash
 
 SCRIPTDIR=$(dirname "$0")
+MODELDIR="/models"
 
 inputFile=""
 csvDelimiter='c'
 features='A'
 grams=false
 documents=false
-model="$SCRIPTDIR/Senti4SD.model"
+model="$MODELDIR/Senti4SD.model"
 chunkSize=200
 jobsNumber=1
 outputFile="$SCRIPTDIR/predictions.csv"
@@ -53,7 +54,7 @@ while getopts "h:i:d:F:m:c:j:o:tg" OPTIONS; do
           features=$OPTARG
           ;;
         m)
-          model="$SCRIPTDIR/$OPTARG"
+          model="$MODELDIR/$OPTARG"
           ;;
         c)
           chunkSize=$OPTARG
