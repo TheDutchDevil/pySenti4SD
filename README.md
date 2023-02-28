@@ -14,13 +14,18 @@ run using the following command:
 
 `python utility.py --train --model-name [name] --input [input-file] --output [output-file]`
 
+The utility script has three modes:
+- `--models`: List all pretrained models that are present (Currently only `Senti4SD`).
+- `--train`: Given a CSV with text and polarity labels train Senti4SD. 
+- `--predict`: Label a CSV file with predicted sentiment polarity according to an existing model.
+
 # Senti4SD
 
 Python implementation of Senti4SD. Senti4SD is an emotion polarity classifier specifically trained to support sentiment analysis in developers' communication channels. 
 Senti4SD is trained and evaluated on a gold standard of over 4K posts extracted from Stack Overflow. It is part of the Collab Emotion Mining Toolkit, ([EMTk](https://github.com/collab-uniba/EMTk)).
 
 ## Fair Use Policy
-Please, cite the following paper if you intend to use our tool for your own research:
+Please, cite the following paper if you intend to use Senti4SD tool for your own research:
 > Calefato, F., Lanubile, F., Maiorano, F., Novielli N. (2018) "Sentiment Polarity Detection for Software Development," _Empirical Software Engineering_, 23(3), pp:1352-1382, doi: https://doi.org/10.1007/s10664-017-9546-9. [(BibTeX)](https://scholar.googleusercontent.com/scholar.bib?q=info:2Vtb0Wmx7hEJ:scholar.google.com/&output=citation&scisig=AAGBfm0AAAAAW9gCvJzwrHV1MKhoxzqLaJZA8lPDFxgx&scisf=4&ct=citation&cd=-1&hl=en)
 
 
