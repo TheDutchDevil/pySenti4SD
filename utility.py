@@ -79,7 +79,7 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
 
     # Move the trained model to the models folder
     shutil.move(os.path.join("/app", f"{model_name}.model"), os.path.join("/models", f"{model_name}.model"))
-    shutil.move(os.path.join("/app", f"{model_name}.model_le"), os.path.join("/models", f"{model_name}.model"))
+    shutil.move(os.path.join("/app", f"{model_name}.model_le"), os.path.join("/models", f"{model_name}.model_le"))
    
 
 
@@ -122,6 +122,8 @@ if __name__ == "__main__":
 
     parser.add_argument("--predict", dest="predict", help="", action="store_true")
 
+    parser.add_argument("--test-split", dest="test_split", help="", type=float, default=0.3)
+
     parser.add_argument("--model-name", dest="model_name", help="", type=str)
 
     parser.add_argument("--input", dest="input", help="", type=str)
@@ -143,7 +145,7 @@ if __name__ == "__main__":
         get_models()
 
     if args.train:
-        train_model(args.input, args.model_name, predictions_path = args.output, text_column=args.text_column, label_column=args.label_column)
+        train_model(args.input, args.model_name, predictions_path = args.output, text_column=args.text_column, label_column=args.label_column, split=args.test_split)
 
     if args.predict:
         predict(args.input, model_name = args.model_name, predictions_path = args.output, text_column=args.text_column)
