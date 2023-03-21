@@ -100,8 +100,6 @@ def predict(file, model_name = "Senti4SD", predictions_path = "out.csv", text_co
 
     run_result.check_returncode()
 
-    predictions_path = os.path.join("predictions", "test_preds.csv")
-
     predictions = pd.read_csv(predictions_path)
 
     df_test = pd.read_csv(file)
