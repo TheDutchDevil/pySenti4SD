@@ -122,6 +122,8 @@ if __name__ == "__main__":
 
     parser.add_argument("--predict", dest="predict", help="", action="store_true")
 
+    parser.add_argument("--seed", dest="seed", help="Seed used for the train/test split", type=int, default=None)
+
     parser.add_argument("--test-split", dest="test_split", help="", type=float, default=0.3)
 
     parser.add_argument("--model-name", dest="model_name", help="", type=str)
@@ -145,7 +147,7 @@ if __name__ == "__main__":
         get_models()
 
     if args.train:
-        train_model(args.input, args.model_name, predictions_path = args.output, text_column=args.text_column, label_column=args.label_column, split=args.test_split)
+        train_model(args.input, args.model_name, predictions_path = args.output, text_column=args.text_column, label_column=args.label_column, split=args.test_split, random_state = args.seed)
 
     if args.predict:
         predict(args.input, model_name = args.model_name, predictions_path = args.output, text_column=args.text_column)
