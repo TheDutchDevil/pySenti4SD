@@ -30,7 +30,7 @@ def get_models():
 
  
 
-def train_model(file_path, model_name, predictions_path = None, split = 0.3, random_state = None, text_column = "text", label_column = "label"):
+def train_model(file_path, model_name, predictions_path = None, split = 0.3, random_state = None, text_column = "text", label_column = "label", seperator = "c"):
     '''
     Take a file, converts it to the pysenti4sd format and 
     then calls the pysenti4sd shell to train the model.  
@@ -48,7 +48,12 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
     if not Path(file_path).is_file():
         raise ValueError(f"{file_path} is not a valid file")
 
-    df = pd.read_csv(file_path)
+    if seperator == "c":
+        df = pd.read_csv(file_path)
+    elif seperator == "sc":
+        df = pd.read_csv(file_path, sep=";")
+    else:
+        raise ValueError(f"Unknown seperator {seperator}")
 
     # If there is no column named id, we add one with row numbers
     if "id" not in df.columns:
@@ -83,9 +88,14 @@ def train_model(file_path, model_name, predictions_path = None, split = 0.3, ran
    
 
 
-def predict(file, model_name = "Senti4SD", predictions_path = "out.csv", text_column = "text"):
+def predict(file, model_name = "Senti4SD", predictions_path = "out.csv", text_column = "text", seperator = "c"):
 
-    df = pd.read_csv(file)
+    if seperator == "c":
+        df = pd.read_csv(file)
+    elif seperator == "sc":
+        df = pd.read_csv(file, sep=";")
+    else:
+        raise ValueError(f"Unknown seperator {seperator}")
 
     if "id" not in df.columns:
         df["Id"] = df.index
@@ -136,6 +146,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--label-column", dest="label_column", help="", type=str, default="label")
 
+    # We should also take into account that the seperator might be different
+    parser.add_argument("--sep", dest="sep", help="Seperator used in .csv, either c for comma or sc for semicolon", type=str, default="c")
+
     args = parser.parse_args()
 
     if sum([args.train, args.list, args.predict]) != 1:
@@ -145,10 +158,10 @@ if __name__ == "__main__":
         get_models()
 
     if args.train:
-        train_model(args.input, args.model_name, predictions_path = args.output, text_column=args.text_column, label_column=args.label_column, split=args.test_split)
+        train_model(args.input, args.model_name, predictions_path = args.output, text_column=args.text_column, label_column=args.label_column, split=args.test_split, seperator=args.sep)
 
     if args.predict:
-        predict(args.input, model_name = args.model_name, predictions_path = args.output, text_column=args.text_column)
+        predict(args.input, model_name = args.model_name, predictions_path = args.output, text_column=args.text_column, seperator=args.sep)
 
 
 
